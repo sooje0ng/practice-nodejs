@@ -1,6 +1,6 @@
-var http = require("http");
-var fs = require("fs");
-var url = require("url");
+const http = require("http");
+const fs = require("fs");
+const url = require("url");
 
 function templateHTML(title, list, body) {
     return `
@@ -20,9 +20,9 @@ function templateHTML(title, list, body) {
 }
 
 function templateList(filelist) {
-    var list = "<ul>";
+    const list = "<ul>";
 
-    var i = 0;
+    let i = 0;
     while (i < filelist.length) {
         list =
             list + `<li><a href="/?id=${filelist[i]}">${filelist[i]}</a></li>`;
@@ -32,18 +32,18 @@ function templateList(filelist) {
     return list;
 }
 
-var app = http.createServer(function (request, response) {
-    var _url = request.url;
-    var queryData = url.parse(_url, true).query;
-    var pathname = url.parse(_url, true).pathname;
+const app = http.createServer(function (request, response) {
+    const _url = request.url;
+    const queryData = url.parse(_url, true).query;
+    const pathname = url.parse(_url, true).pathname;
     if (pathname === "/") {
         if (queryData.id === undefined) {
             fs.readdir("./data", function (error, filelist) {
-                var title = "Welcome";
-                var description = "Hello, Node.js";
-                var list = templateList(filelist);
+                let title = "Welcome";
+                let description = "Hello, Node.js";
+                let list = templateList(filelist);
 
-                var template = templateHTML(
+                let template = templateHTML(
                     title,
                     list,
                     `<h2>${title}</h2>${description}`
@@ -53,8 +53,8 @@ var app = http.createServer(function (request, response) {
             });
         } else {
             fs.readdir("./data", function (error, filelist) {
-                var list = "<ul>";
-                var i = 0;
+                let list = "<ul>";
+                let i = 0;
                 while (i < filelist.length) {
                     list =
                         list +
@@ -66,9 +66,9 @@ var app = http.createServer(function (request, response) {
                     `data/${queryData.id}`,
                     "utf-8",
                     function (err, description) {
-                        var title = queryData.id;
-                        var list = templateList(filelist);
-                        var template = templateHTML(
+                        let title = queryData.id;
+                        let list = templateList(filelist);
+                        let template = templateHTML(
                             title,
                             list,
                             `<h2>${title}</h2>${description}`
