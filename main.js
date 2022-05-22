@@ -4,23 +4,25 @@ const url = require("url");
 
 function templateHTML(title, list, body) {
     return `
-          <!doctype html>
-          <html>
-          <head>
-            <title>WEB1 - ${title}</title>
-            <meta charset="utf-8">
-          </head>
-          <body>
-            <h1><a href="/">WEB</a></h1>
-            ${list}
-            ${body}
-          </body>
-          </html>
-          `;
+        <!doctype html>
+        <html>
+        <head>
+        <title>WEB1 - ${title}</title>
+        <meta charset="utf-8">
+        </head>
+        <body>
+        <h1><a href="/">WEB</a></h1>
+        ${list}
+        <a href ="/create">create</a>
+        <a href ="/update">update</a>
+        ${body}
+        </body>
+        </html>
+        `;
 }
 
 function templateList(filelist) {
-    const list = "<ul>";
+    let list = "<ul>";
 
     let i = 0;
     while (i < filelist.length) {
@@ -42,7 +44,6 @@ const app = http.createServer(function (request, response) {
                 let title = "Welcome";
                 let description = "Hello, Node.js";
                 let list = templateList(filelist);
-
                 let template = templateHTML(
                     title,
                     list,
@@ -79,6 +80,24 @@ const app = http.createServer(function (request, response) {
                 );
             });
         }
+    } else if (pathname === "/create") {
+        fs.readdir("./data", function (error, filelist) {
+            let title = "WEB - create";
+            let list = templateList(filelist);
+
+            let template = templateHTML(
+                title,
+                list,
+                `<form action="http://localhost:3000/create" method="post">
+                <p><input type="text" name="title" placeholder="title"></p>
+                <p><textarea name="description" placeholder="description"></textarea></p>
+                <p><input type="submit"></p>
+                </form>
+                `
+            );
+            response.writeHead(200);
+            response.end(template);
+        });
     } else {
         response.writeHead(404);
         response.end("Not found");
